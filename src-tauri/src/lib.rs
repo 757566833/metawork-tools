@@ -22,7 +22,7 @@ fn start_polling(app_handle: &mut tauri::App, window: tauri::WebviewWindow) {
         });
     std::thread::spawn(move || {
         loop {
-            std::thread::sleep(std::time::Duration::from_secs(5)); // 每 600 秒执行一次
+            std::thread::sleep(std::time::Duration::from_secs(600)); // 每 600 秒执行一次
 
             // JS 代码：获取 class 内容并调用 Rust 接口回传
             let js_code = r#"
