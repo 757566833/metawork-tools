@@ -17,13 +17,17 @@ fn start_polling(app_handle: &mut tauri::App, window: tauri::WebviewWindow) {
         .dialog()
         .message("尽快登录进入生产线首页以便工具检测，8点前16点后不检测")
         .title("每10分钟检测一次虚拟产线有没有开启")
-        .show(|_result| {
-           
-        });
+        .show(|_result| {});
     std::thread::spawn(move || {
         loop {
-            std::thread::sleep(std::time::Duration::from_secs(600)); // 每 600 秒执行一次
-
+            std::thread::sleep(std::time::Duration::from_secs(590)); // 每 600 秒执行一次
+            let js_reload_code = r#"
+            window.location.reload();
+        "#;
+            if let Err(err) = window.eval(js_reload_code) {
+                eprintln!("JS eval error: {:?}", err);
+            }
+            std::thread::sleep(std::time::Duration::from_secs(10));
             // JS 代码：获取 class 内容并调用 Rust 接口回传
             let js_code = r#"
                 (function() {
@@ -74,7 +78,6 @@ fn not_work(window: Window) {
         // }
 
         // let result = binding.get();
-
 
         // println!("not_work {}", binding.get().unwrap());
 
